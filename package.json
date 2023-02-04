@@ -10,13 +10,13 @@
     "lint": "eslint --fix --ext .js,.jsx,.ts,.tsx ./src"
   },
   "lint-staged": {
-    "**/*.{js, jsx, ts, tsx}": [
+    "**/*.{js,jsx,ts,tsx}": [
       "npm run lint"
     ]
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm lint",
+      "pre-commit": "lint-staged",
       "pre-push": "ng build --aot true"
     }
   },

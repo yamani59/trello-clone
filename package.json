@@ -14,12 +14,6 @@
       "npm run lint"
     ]
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged",
-      "pre-push": "ng build --aot true"
-    }
-  },
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0"

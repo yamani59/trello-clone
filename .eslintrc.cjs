@@ -16,6 +16,8 @@ module.exports = {
     'react/react-in-jsx-scope': 'off',
     'react/jsx-no-target-blank': 'off',
     '@typescript-eslint/no-confusing-void-expression': 'off',
+    'no-unused-expressions': 'off',
+    '@typescript-eslint/no-unused-expressions': 'off',
   },
   settings: {
     react: {

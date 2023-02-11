@@ -12,20 +12,22 @@ const Todo = () => {
 
   boardsComponent = boards.map((board, idx) => (
     <Board
-      cardHandler={(title) => boards[idx].cards?.push({ 
-        id: boards[idx].cards?.length + 1, 
-        name: title 
-      })}
+      cardHandler={(title) => {
+        boards[idx].cards?.push({
+          id: new Date().getTime(),
+          board_id: idx + 1,
+          name: title,
+        });
+      }}
       cardDropHandler={(boardIndex, card) => {
-        setBoards(
-          boards.map((data, index) => {
-            if (boardIndex === index) {
-              const newCard = data;
-              newCard.cards?.push(card);
-              return newCard;
-            } else return data;
-          })
-        );
+        boards[(card.board_id as number) - 1].cards = boards[
+          (card.board_id as number) - 1
+        ].cards?.filter((data) => {
+          return data.id !== card.id;
+        });
+        card.board_id = boardIndex + 1;
+        boards[boardIndex].cards.push(card);
+        setBoards(boards.map((data) => data));
       }}
       cards={board.cards}
       title={board.name}
@@ -39,7 +41,7 @@ const Todo = () => {
     setBoards([
       ...boards,
       {
-        id: '1',
+        id: boards.length + 1,
         name: title,
         cards: [],
       },

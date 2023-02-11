@@ -1,7 +1,7 @@
-import React, { useState, useRef, type SetStateAction } from "react";
-import { type CardType } from "./Todo.data";
-import { AiOutlineClose, AiOutlineMore } from "react-icons/ai";
-import FormInput from "@/components/FormInput/Index";
+import React, { useState, useRef, type SetStateAction } from 'react';
+import { type CardType } from './Todo.data';
+import { AiOutlineClose, AiOutlineMore } from 'react-icons/ai';
+import FormInput from '@/components/FormInput/Index';
 
 interface BoardProps {
   title: string;
@@ -27,20 +27,26 @@ const Board = ({ cards, title, boardIndex, cardHandler, cardDropHandler }: Board
   };
 
   const onDragOverHandler = (e: React.DragEvent, data: CardType) => {
-    const target = e.target as Element
+    const target = e.target as Element;
+
     e.dataTransfer.setData(
-      'text/plain', 
-      JSON.stringify({...data, board_id: boardIndex})
-    )
-    target.classList?.add('opacity-50')
-    target.classList?.add('border-2')
-  }
+      'text/plain',
+      JSON.stringify(data)
+    );
+
+    target.classList?.add('opacity-50');
+    target.classList?.add('border-2');
+  };
 
   const onDragEndHandler = (e: React.DragEvent) => {
-    const target = e.target as Element
-    target.classList.remove('opacity-50')
-    target.classList.remove('border-2')
-  }
+    const target = e.target as Element;
+    target.classList.remove('opacity-50');
+    target.classList.remove('border-2');
+  };
+
+  const onDropHandler = (e: React.DragEvent) => {
+    cardDropHandler(boardIndex, JSON.parse(e.dataTransfer.getData('text')));
+  };
 
   return (
     <div className="w-[250px] min-w-[250px] mr-3 rounded-sm p-2 bg-[#ebecf0]">
@@ -49,12 +55,10 @@ const Board = ({ cards, title, boardIndex, cardHandler, cardDropHandler }: Board
         <AiOutlineMore className="ckeyursor-pointer mt-1" />
       </div>
 
-      <div onDrop={(e) => {
-        cardDropHandler(boardIndex, JSON.parse(e.dataTransfer.getData('text')))
-      }}>
+      <div onDrop={onDropHandler}>
         {cards?.map((data, index) => (
           <div
-            className="p-2 bg-white rounded-sm my-2 cursor-pointer shadow-sm text-xs dra"
+            className="p-2 bg-white rounded-sm my-2 cursor-pointer shadow-sm text-xs hover:bg-slate-100 delay-100"
             key={index}
             draggable
             onDragStart={(e) => onDragOverHandler(e, data)}

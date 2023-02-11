@@ -1,77 +1,8 @@
 import { useRef, useState } from 'react';
-import { AiOutlineMore, AiOutlineClose } from 'react-icons/ai';
+import { AiOutlineClose } from 'react-icons/ai';
 import FormInput from '@/components/FormInput/Index';
-import { BoardType, CardType } from './Todo.data';
-
-interface BoardProps {
-  title: string;
-  cards?: CardType[];
-  cardHandler: (title: string) => void;
-}
-
-const Board = ({ cards, title, cardHandler }: BoardProps) => {
-  const [showTextArea, setShowTextArea] = useState<boolean>(false);
-  const [cardTitle, setCardTitle] = useState<string>('');
-  const AddCard = useRef<HTMLElement>(null);
-
-  function addCard() {
-    cardHandler(cardTitle);
-    showAddCard();
-  }
-
-  function showAddCard() {
-    AddCard.current?.classList.toggle('hidden');
-    setShowTextArea(!showTextArea);
-  }
-
-  return (
-    <div className="w-[250px] min-w-[250px] mx-3 rounded-sm p-2 bg-[#ebecf0]">
-      <div className="flex align-middle justify-between mx-1 w-100">
-        <span className="font-medium">{title}</span>
-        <AiOutlineMore className="cursor-pointer mt-1" />
-      </div>
-
-      {cards?.map((data, index) => (
-        <div
-          className="p-2 bg-white rounded-sm my-2 cursor-pointer shadow-sm text-xs"
-          key={index}
-          draggable
-        >
-          {data.name}
-        </div>
-      ))}
-
-      {showTextArea && (
-        <div>
-          <FormInput.TextArea
-            className="focus:outline-none"
-            inputHandler={(data) => setCardTitle(data)}
-          />
-          <div className="flex items-center">
-            <button
-              onClick={addCard}
-              className="bg-blue-500 text-white py-1 px-2 font-light text-md rounded-sm hover:bg-blue-400"
-            >
-              Tambah
-            </button>
-            <AiOutlineClose
-              onClick={showAddCard}
-              className="cursor-pointer ml-3 text-xl text-gray-500"
-            />
-          </div>
-        </div>
-      )}
-
-      <div
-        ref={AddCard as React.RefObject<HTMLDivElement>}
-        onClick={showAddCard}
-        className="flex cursor-pointer text-gray-500 hover:bg-slate-300 ease-in duration-100 p-1"
-      >
-        + Add a Card
-      </div>
-    </div>
-  );
-};
+import { type BoardType } from './Todo.data';
+import Board from './Board';
 
 const Todo = () => {
   const AddBoard = useRef<HTMLDivElement>(null);
@@ -81,12 +12,24 @@ const Todo = () => {
 
   boardsComponent = boards.map((board, idx) => (
     <Board
-      cardHandler={(title) => {
-        boards[idx].cards?.push({ id: '1', name: title });
-        console.log(boards[idx]);
+      cardHandler={(title) => boards[idx].cards?.push({ 
+        id: boards[idx].cards?.length + 1, 
+        name: title 
+      })}
+      cardDropHandler={(boardIndex, card) => {
+        setBoards(
+          boards.map((data, index) => {
+            if (boardIndex === index) {
+              const newCard = data;
+              newCard.cards?.push(card);
+              return newCard;
+            } else return data;
+          })
+        );
       }}
       cards={board.cards}
       title={board.name}
+      boardIndex={idx}
       key={idx}
     />
   ));

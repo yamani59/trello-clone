@@ -1,5 +1,5 @@
 export interface CardType {
-  id: string;
+  id: string | number;
   name: string;
   label?: string;
 }

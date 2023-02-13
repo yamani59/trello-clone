@@ -1,7 +1,7 @@
 import React, { useState, useRef, type SetStateAction } from 'react';
 import { AiOutlineClose, AiOutlineMore } from 'react-icons/ai';
 import FormInput from '@/components/FormInput/Index';
-import Options from './Options';
+// import Options from './Options';
 
 const Board = ({
   cards,
@@ -15,7 +15,7 @@ const Board = ({
   const [cardTitle, setCardTitle] = useState<string>('');
   const AddCard = useRef<HTMLElement>(null);
   const [showTitleUpdate, setShowTitleUpdate] = useState<boolean>(false);
-  const [showOptions, setShowOptios] = useState<boolean>(false);
+  // const [showOptions, setShowOptios] = useState<boolean>(false);
 
   const addCard = () => {
     cardHandler(cardTitle);

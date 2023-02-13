@@ -27,7 +27,24 @@ const TextArea = ({ inputHandler, required, className }: FormProps) => {
   );
 };
 
-const Text = ({ inputHandler, className, placeholder }: FormProps) => {
+// const Text = forwardRef(function Text(prosp: FormProps, ref) {
+//   const inputRef = useRef<HTMLInputElement>(null)
+
+//   useImperativeHandle(ref, () => ({
+//     focus() {
+//       inputRef.current?.focus()
+//     },
+//     // setValue() {
+//     //   (inputRef.current as Object).value = prosp.value
+//     // }
+//   }), [])
+
+//   return (
+//     <input type="text" {...prosp} ref={inputRef} />
+//   )
+// });
+
+const Text = ({ onEnter, inputHandler, className, placeholder, value }: FormProps) => {
   const text = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -40,6 +57,8 @@ const Text = ({ inputHandler, className, placeholder }: FormProps) => {
       <input
         ref={text}
         type="text"
+        onKeyDown={onEnter}
+        defaultValue={value}
         placeholder={placeholder}
         onInput={inputHandler}
         className="w-[100%] placeholder:text-sm text-sm rounded-none p-2"

@@ -1,7 +1,6 @@
 import { useRef, useState } from 'react';
 import { AiOutlineClose } from 'react-icons/ai';
 import FormInput from '@/components/FormInput/Index';
-import { type BoardType } from './Todo.data';
 import Board from './Board';
 
 const Todo = () => {
@@ -12,6 +11,10 @@ const Todo = () => {
 
   boardsComponent = boards.map((board, idx) => (
     <Board
+      titleChangeHandler={(boardIndex, title) => {
+        boards[boardIndex].name = title;
+        setBoards(boards.map((data) => data));
+      }}
       cardHandler={(title) => {
         boards[idx].cards?.push({
           id: new Date().getTime(),

@@ -1,20 +1,21 @@
 import React, { useState, useRef, type SetStateAction } from 'react';
-import { type CardType } from './Todo.data';
 import { AiOutlineClose, AiOutlineMore } from 'react-icons/ai';
 import FormInput from '@/components/FormInput/Index';
+import Options from './Options';
 
-interface BoardProps {
-  title: string;
-  boardIndex: number;
-  cards?: CardType[];
-  cardHandler: (title: string) => void;
-  cardDropHandler: (boardIndex: number, card: CardType) => void;
-}
-
-const Board = ({ cards, title, boardIndex, cardHandler, cardDropHandler }: BoardProps) => {
+const Board = ({
+  cards,
+  title,
+  boardIndex,
+  cardHandler,
+  cardDropHandler,
+  titleChangeHandler,
+}: BoardProps) => {
   const [showTextArea, setShowTextArea] = useState<boolean>(false);
   const [cardTitle, setCardTitle] = useState<string>('');
   const AddCard = useRef<HTMLElement>(null);
+  const [showTitleUpdate, setShowTitleUpdate] = useState<boolean>(false);
+  const [showOptions, setShowOptios] = useState<boolean>(false);
 
   const addCard = () => {
     cardHandler(cardTitle);
@@ -29,10 +30,7 @@ const Board = ({ cards, title, boardIndex, cardHandler, cardDropHandler }: Board
   const onDragOverHandler = (e: React.DragEvent, data: CardType) => {
     const target = e.target as Element;
 
-    e.dataTransfer.setData(
-      'text/plain',
-      JSON.stringify(data)
-    );
+    e.dataTransfer.setData('text/plain', JSON.stringify(data));
 
     target.classList?.add('opacity-50');
     target.classList?.add('border-2');
@@ -50,8 +48,22 @@ const Board = ({ cards, title, boardIndex, cardHandler, cardDropHandler }: Board
 
   return (
     <div className="w-[250px] min-w-[250px] mr-3 rounded-sm p-2 bg-[#ebecf0]">
-      <div className="flex align-middle justify-between mx-1 w-100">
-        <span className="font-medium">{title}</span>
+      <div
+        onDoubleClick={() => setShowTitleUpdate(true)}
+        className="flex align-middle justify-between mx-1 w-100"
+      >
+        {showTitleUpdate ? (
+          <FormInput.Text
+            placeholder="Masukan board..."
+            value={title}
+            onEnter={(e) => e.key === 'Enter' && setShowTitleUpdate(false)}
+            className="outline-none border-2 border-sky-700 scroll-m-0"
+            inputHandler={(e) => titleChangeHandler(boardIndex, e.target.value)}
+          ></FormInput.Text>
+        ) : (
+          <span className="font-medium">{title}</span>
+        )}
+
         <AiOutlineMore className="ckeyursor-pointer mt-1" />
       </div>
 

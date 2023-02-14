@@ -11,6 +11,9 @@ const Todo = () => {
 
   boardsComponent = boards.map((board, idx) => (
     <Board
+      deleteHandler={(boardIndex) => {
+        setBoards(boards.filter((data, index) => index !== boardIndex));
+      }}
       titleChangeHandler={(boardIndex, title) => {
         boards[boardIndex].name = title;
         setBoards(boards.map((data) => data));

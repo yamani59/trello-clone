@@ -1,7 +1,7 @@
 import React, { useState, useRef, type SetStateAction } from 'react';
 import { AiOutlineClose, AiOutlineMore } from 'react-icons/ai';
 import FormInput from '@/components/FormInput/Index';
-// import Options from './Options';
+import Options from './Options';
 
 const Board = ({
   cards,
@@ -10,12 +10,14 @@ const Board = ({
   cardHandler,
   cardDropHandler,
   titleChangeHandler,
+  deleteHandler
 }: BoardProps) => {
   const [showTextArea, setShowTextArea] = useState<boolean>(false);
   const [cardTitle, setCardTitle] = useState<string>('');
   const AddCard = useRef<HTMLElement>(null);
   const [showTitleUpdate, setShowTitleUpdate] = useState<boolean>(false);
-  // const [showOptions, setShowOptios] = useState<boolean>(false);
+  const [showOptions, setShowOptios] = useState<boolean>(false);
+  const [optionCordinat, setOptionCordinat] = useState<Cordinat>();
 
   const addCard = () => {
     cardHandler(cardTitle);
@@ -46,12 +48,17 @@ const Board = ({
     cardDropHandler(boardIndex, JSON.parse(e.dataTransfer.getData('text')));
   };
 
+  const optionHandler = (e: React.MouseEvent) => {
+    setShowOptios(!showOptions);
+    setOptionCordinat(() => ({
+      x: e.clientX,
+      y: e.clientY,
+    }));
+  };
+
   return (
     <div className="w-[250px] min-w-[250px] mr-3 rounded-sm p-2 bg-[#ebecf0]">
-      <div
-        onDoubleClick={() => setShowTitleUpdate(true)}
-        className="flex align-middle justify-between mx-1 w-100"
-      >
+      <div className="flex align-middle justify-between mx-1 w-100">
         {showTitleUpdate ? (
           <FormInput.Text
             placeholder="Masukan board..."
@@ -61,10 +68,20 @@ const Board = ({
             inputHandler={(e) => titleChangeHandler(boardIndex, e.target.value)}
           ></FormInput.Text>
         ) : (
-          <span className="font-medium">{title}</span>
+          <div>
+            <span
+              onDoubleClick={() => setShowTitleUpdate(true)}
+              className="font-medium cursor-pointer w-96"
+            >
+              {title}
+            </span>
+          </div>
         )}
 
-        <AiOutlineMore className="ckeyursor-pointer mt-1" />
+        <AiOutlineMore
+          onClick={optionHandler}
+          className="cursor-pointer mt-1 text-xl"
+        />
       </div>
 
       <div onDrop={onDropHandler}>
@@ -110,6 +127,21 @@ const Board = ({
       >
         + Add a Card
       </div>
+
+      {showOptions && (
+        <Options
+          {...optionCordinat}
+          className="w-[200px]"
+          title={'List Actions'}
+          closeHandler={() => {
+            setShowOptios(!showOptions);
+          }}
+        >
+          <ul className="cursor-pointer mx-[-8px] text-sm text-gray-700">
+            <li onClick={() => deleteHandler(boardIndex)} className="py-2 hover:bg-gray-100 px-2 duration-100">Hapus Board</li>
+          </ul>
+        </Options>
+      )}
     </div>
   );
 };

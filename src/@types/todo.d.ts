@@ -18,10 +18,17 @@ interface BoardProps {
   cardHandler: (title: string) => void;
   cardDropHandler: (boardIndex: number, card: CardType) => void;
   titleChangeHandler: (boardIndex: number, title: string) => void;
+  deleteHandler: (boardIndex: number) => void
 }
 
-interface OptionsProps {
-  children: React.ReactNode
+interface Cordinat {
   x?: number,
   y?: number,
+}
+
+interface OptionsProps extends Cordinat {
+  children: React.ReactNode,
+  className?: string,
+  title?: string,
+  closeHandler: () => void
 }

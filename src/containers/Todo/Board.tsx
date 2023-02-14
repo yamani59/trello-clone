@@ -10,7 +10,7 @@ const Board = ({
   cardHandler,
   cardDropHandler,
   titleChangeHandler,
-  deleteHandler
+  deleteHandler,
 }: BoardProps) => {
   const [showTextArea, setShowTextArea] = useState<boolean>(false);
   const [cardTitle, setCardTitle] = useState<string>('');
@@ -18,6 +18,7 @@ const Board = ({
   const [showTitleUpdate, setShowTitleUpdate] = useState<boolean>(false);
   const [showOptions, setShowOptios] = useState<boolean>(false);
   const [optionCordinat, setOptionCordinat] = useState<Cordinat>();
+  let checkGhostElement: string;
 
   const addCard = () => {
     cardHandler(cardTitle);
@@ -31,9 +32,8 @@ const Board = ({
 
   const onDragOverHandler = (e: React.DragEvent, data: CardType) => {
     const target = e.target as Element;
-
+    
     e.dataTransfer.setData('text/plain', JSON.stringify(data));
-
     target.classList?.add('opacity-50');
     target.classList?.add('border-2');
   };
@@ -46,6 +46,25 @@ const Board = ({
 
   const onDropHandler = (e: React.DragEvent) => {
     cardDropHandler(boardIndex, JSON.parse(e.dataTransfer.getData('text')));
+    document.getElementById('ghost_card')?.remove()
+  };
+
+  const onDragOverHanler = (e: React.DragEvent) => {
+    e.preventDefault();
+    const target = e.target as Element;
+    const ghostElement = document.createElement('div');
+    ghostElement.setAttribute('id', 'ghost_card')
+    ghostElement.classList.add(
+      ...'p-2 rounded-sm my-2 h-[36px] cursor-pointer shadow-sm text-xs border-dotted border-2 bg-slate-100 delay-100'.split(
+        ' '
+      )
+    );
+  
+    if (checkGhostElement !== target.getAttribute('id')) {
+      document.getElementById('ghost_card')?.remove()
+      checkGhostElement = target.getAttribute('id') as string;
+      target.parentElement?.insertBefore(ghostElement, target);
+    }
   };
 
   const optionHandler = (e: React.MouseEvent) => {
@@ -63,6 +82,7 @@ const Board = ({
           <FormInput.Text
             placeholder="Masukan board..."
             value={title}
+            autoFocus={true}
             onEnter={(e) => e.key === 'Enter' && setShowTitleUpdate(false)}
             className="outline-none border-2 border-sky-700 scroll-m-0"
             inputHandler={(e) => titleChangeHandler(boardIndex, e.target.value)}
@@ -87,12 +107,16 @@ const Board = ({
       <div onDrop={onDropHandler}>
         {cards?.map((data, index) => (
           <div
+            id={`board_${boardIndex}_card_${index}`}
             className="p-2 bg-white rounded-sm my-2 cursor-pointer shadow-sm text-xs hover:bg-slate-100 delay-100"
             key={index}
             draggable
             onDragStart={(e) => onDragOverHandler(e, data)}
-            onDragOver={(e) => e.preventDefault()}
+            onDragOver={onDragOverHanler}
             onDragEnd={onDragEndHandler}
+            onDragEndCapture={(e) => {
+              document.getElementById('ghost_card')?.remove()
+            }}
           >
             {data.name}
           </div>
@@ -138,7 +162,15 @@ const Board = ({
           }}
         >
           <ul className="cursor-pointer mx-[-8px] text-sm text-gray-700">
-            <li onClick={() => deleteHandler(boardIndex)} className="py-2 hover:bg-gray-100 px-2 duration-100">Hapus Board</li>
+            <li
+              onClick={() => {
+                deleteHandler(boardIndex);
+                setShowOptios(!showOptions);
+              }}
+              className="py-2 hover:bg-gray-100 px-2 duration-100"
+            >
+              Hapus Board
+            </li>
           </ul>
         </Options>
       )}

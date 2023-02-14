@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-const TextArea = ({ inputHandler, required, className }: FormProps) => {
+const TextArea = ({ inputHandler, required, className, autoFocus }: FormProps) => {
   const textArea = useRef<HTMLTextAreaElement>(null);
   const [textAreaHeight, setTextAreaHeight] = useState<number>(60);
 
@@ -27,29 +27,13 @@ const TextArea = ({ inputHandler, required, className }: FormProps) => {
   );
 };
 
-// const Text = forwardRef(function Text(prosp: FormProps, ref) {
-//   const inputRef = useRef<HTMLInputElement>(null)
-
-//   useImperativeHandle(ref, () => ({
-//     focus() {
-//       inputRef.current?.focus()
-//     },
-//     // setValue() {
-//     //   (inputRef.current as Object).value = prosp.value
-//     // }
-//   }), [])
-
-//   return (
-//     <input type="text" {...prosp} ref={inputRef} />
-//   )
-// });
-
-const Text = ({ onEnter, inputHandler, className, placeholder, value }: FormProps) => {
+const Text = ({ onEnter, inputHandler, className, placeholder, value, autoFocus }: FormProps) => {
   const text = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     typeof className !== 'undefined' &&
       text.current?.classList.add(...className.split(' '));
+    if (autoFocus === true) text.current?.focus()
   }, []);
 
   return (

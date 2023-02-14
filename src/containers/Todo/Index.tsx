@@ -55,7 +55,7 @@ const Todo = () => {
   }
 
   function showHandlerBoard() {
-    AddBoard.current?.classList.toggle('hidden');
+    return AddBoard.current?.classList.toggle('hidden');
   }
 
   return (

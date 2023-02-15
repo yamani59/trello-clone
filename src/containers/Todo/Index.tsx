@@ -11,6 +11,10 @@ const Todo = () => {
 
   boardsComponent = boards.map((board, idx) => (
     <Board
+      deleteCardHandler={(boardIndex, index) => {
+        boards[boardIndex].cards.splice(index, 1);
+        setBoards(boards.map((data) => data));
+      }}
       deleteHandler={(boardIndex) => {
         setBoards(boards.filter((data, index) => index !== boardIndex));
       }}

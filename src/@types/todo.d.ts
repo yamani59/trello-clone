@@ -18,7 +18,8 @@ interface BoardProps {
   cardHandler: (title: string) => void;
   cardDropHandler: (boardIndex: number, card: CardType) => void;
   titleChangeHandler: (boardIndex: number, title: string) => void;
-  deleteHandler: (boardIndex: number) => void
+  deleteHandler: (boardIndex: number) => void,
+  deleteCardHandler: (boardIndex: number, cardIndex: number) => void
 }
 
 interface Cordinat {

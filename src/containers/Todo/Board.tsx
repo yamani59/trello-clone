@@ -1,5 +1,6 @@
 import React, { useState, useRef, type SetStateAction } from 'react';
 import { AiOutlineClose, AiOutlineMore } from 'react-icons/ai';
+import { BsFillTrashFill } from 'react-icons/bs';
 import FormInput from '@/components/FormInput/Index';
 import Options from './Options';
 
@@ -11,6 +12,7 @@ const Board = ({
   cardDropHandler,
   titleChangeHandler,
   deleteHandler,
+  deleteCardHandler,
 }: BoardProps) => {
   const [showTextArea, setShowTextArea] = useState<boolean>(false);
   const [cardTitle, setCardTitle] = useState<string>('');
@@ -32,7 +34,7 @@ const Board = ({
 
   const onDragOverHandler = (e: React.DragEvent, data: CardType) => {
     const target = e.target as Element;
-    
+
     e.dataTransfer.setData('text/plain', JSON.stringify(data));
     target.classList?.add('opacity-50');
     target.classList?.add('border-2');
@@ -46,22 +48,22 @@ const Board = ({
 
   const onDropHandler = (e: React.DragEvent) => {
     cardDropHandler(boardIndex, JSON.parse(e.dataTransfer.getData('text')));
-    document.getElementById('ghost_card')?.remove()
+    document.getElementById('ghost_card')?.remove();
   };
 
   const onDragOverHanler = (e: React.DragEvent) => {
     e.preventDefault();
     const target = e.target as Element;
     const ghostElement = document.createElement('div');
-    ghostElement.setAttribute('id', 'ghost_card')
+    ghostElement.setAttribute('id', 'ghost_card');
     ghostElement.classList.add(
       ...'p-2 rounded-sm my-2 h-[36px] cursor-pointer shadow-sm text-xs border-dotted border-2 bg-slate-100 delay-100'.split(
         ' '
       )
     );
-  
+
     if (checkGhostElement !== target.getAttribute('id')) {
-      document.getElementById('ghost_card')?.remove()
+      document.getElementById('ghost_card')?.remove();
       checkGhostElement = target.getAttribute('id') as string;
       target.parentElement?.insertBefore(ghostElement, target);
     }
@@ -108,17 +110,21 @@ const Board = ({
         {cards?.map((data, index) => (
           <div
             id={`board_${boardIndex}_card_${index}`}
-            className="p-2 bg-white rounded-sm my-2 cursor-pointer shadow-sm text-xs hover:bg-slate-100 delay-100"
+            className="p-2 bg-white rounded-sm my-2 flex justify-between align-middle cursor-pointer shadow-sm text-xs hover:bg-slate-100 delay-100"
             key={index}
             draggable
             onDragStart={(e) => onDragOverHandler(e, data)}
             onDragOver={onDragOverHanler}
             onDragEnd={onDragEndHandler}
             onDragEndCapture={(e) => {
-              document.getElementById('ghost_card')?.remove()
+              document.getElementById('ghost_card')?.remove();
             }}
           >
             {data.name}
+            <BsFillTrashFill
+              onClick={() => deleteCardHandler(boardIndex, index)}
+              className="text-red-600"
+            />
           </div>
         ))}
       </div>

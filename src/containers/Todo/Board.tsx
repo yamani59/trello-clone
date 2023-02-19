@@ -11,6 +11,7 @@ const Board = ({ cards, title, boardIndex, cardHandler, cardDropHandler, titleCh
   const [showTitleUpdate, setShowTitleUpdate] = useState<boolean>(false);
   const [showOptions, setShowOptios] = useState<boolean>(false);
   const [optionCordinat, setOptionCordinat] = useState<Cordinat>();
+  let checkGhostElement: string;
 
   const addCard = () => {
     cardHandler(cardTitle);

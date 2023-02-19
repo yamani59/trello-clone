@@ -33,3 +33,7 @@ interface OptionsProps extends Cordinat {
   title?: string,
   closeHandler: () => void
 }
+
+interface test<T extends Cordinat> {
+  date: T
+}

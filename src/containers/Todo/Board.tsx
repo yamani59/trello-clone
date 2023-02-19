@@ -4,16 +4,7 @@ import { BsFillTrashFill } from 'react-icons/bs';
 import FormInput from '@/components/FormInput/Index';
 import Options from './Options';
 
-const Board = ({
-  cards,
-  title,
-  boardIndex,
-  cardHandler,
-  cardDropHandler,
-  titleChangeHandler,
-  deleteHandler,
-  deleteCardHandler,
-}: BoardProps) => {
+const Board = ({ cards, title, boardIndex, cardHandler, cardDropHandler, titleChangeHandler, deleteHandler, deleteCardHandler,}: BoardProps) => {
   const [showTextArea, setShowTextArea] = useState<boolean>(false);
   const [cardTitle, setCardTitle] = useState<string>('');
   const AddCard = useRef<HTMLElement>(null);
